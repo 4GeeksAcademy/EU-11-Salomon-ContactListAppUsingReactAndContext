@@ -31,6 +31,64 @@ const injectContext = PassedComponent => {
 			 * state.actions.loadSomeData(); <---- calling this function from the flux.js actions
 			 *
 			 **/
+
+			fetch("https://assets.breatheco.de/apis/fake/contact/", {
+      		method: "POST",
+      		body: JSON.stringify([{
+				"full_name": "Dave Bradley",
+				"email": "dave@gmail.com",
+				"agenda_slug": "my_super_agenda",
+				"address":"47568 NW 34ST, 33434 FL, USA",
+				"phone":"7864445566"
+			}]),
+      		headers: {
+        	"Content-Type": "application/json"
+			}
+			})
+			.then(resp => {
+				console.log(resp.ok); // true if the response is successful
+				console.log(resp.status); // the status code (e.g., 200, 400, etc.)
+				console.log(resp.text()); // the response as text
+				return resp.json(); // parse the response as JSON and return a promise
+			})
+			.then(data => {
+				console.log(data); // the object received from the server
+			})
+			.catch(error => {
+				console.log(error); // error handling
+			});
+		}, []);
+
+		useEffect(() => {
+			fetch("https://assets.breatheco.de/apis/fake/contact/{contact_id}", {
+			method: "PUT",
+			body: JSON.stringify([{
+				"full_name": "Dave Bradley",
+				"email": "dave@gmail.com",
+				"agenda_slug": "my_super_agenda",
+				"address":"47568 NW 34ST, 33434 FL, USA",
+				"phone":"7864445566"
+			}]),
+			headers: {
+				"Content-Type": "application/json"
+			}
+			})
+			.then(resp => {
+				console.log(resp.ok); // true if the response is successful
+				console.log(resp.status); // the status code (e.g., 200, 400, etc.)
+				console.log(resp.text()); // the response as text
+			})
+			.then(data => {
+				console.log(data); // the object received from the server
+			})
+			.catch(error => {
+				console.log(error); // error handling
+			});
+			// Fetch the initial agenda list from the API
+			fetch("https://assets.breatheco.de/apis/fake/contact/agenda")
+			.then(resp => resp.json())
+			.then(data => setTodos(data))
+			.catch(error => console.log(error));
 		}, []);
 
 		// The initial value for the context is not null anymore, but the current state of this component,
