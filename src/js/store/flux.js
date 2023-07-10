@@ -1,42 +1,43 @@
+
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+				Contacts: [],
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+			getName: () => {
+				getActions().changeName(); //function 
 			},
-			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
+			loadSomeData:async () => {
+				const serverUrl = "https://assets.breatheco.de/apis/fake/contact/agenda"
+				const unspecificApiData = await loadData(serverUrl)
+					console.log("unspecificApiData", unspecificApiData);
+					const ContactsArr = []
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
+					for (const item of unspecificApiData.results) {
+						console.log(item.url)
+						let temp = await loadData(item.url)
+						ContactsArr.push (temp.result.properties)
+					};
+					console.log("DONE")
+					console.log(ContactsArr)
+					setStore({Contacts: ContactsArr})
+				
+			// changeColor: (index, color) => {
+			// 	//get the store
+			// 	const store = getStore();
 
-				//reset the global store
-				setStore({ demo: demo });
+			// 	//we have to loop the entire demo array to look for the respective index
+			// 	//and change its color
+			// 	const demo = store.demo.map((elm, i) => {
+			// 		if (i === index) elm.background = color;
+			// 		return elm;
+			// 	});
+
+			// 	//reset the global store
+			// 	setStore({ demo: demo });
 			}
 		}
 	};
